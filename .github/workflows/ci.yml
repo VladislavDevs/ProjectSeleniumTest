@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Start banking service
+      run: |
+        wget https://u.netology.ru/backend/uploads/lms/attachments/files/data/92738/dist.zip -O service.zip
+        unzip service.zip
+        cd dist
+        python3 -m http.server --bind 127.0.0.1 8000 &
+        sleep 3
+    - name: Run Selenium tests
+      run: |
+        pytest tests/transfer_test.py --headless
+      env:
+        CI: true
