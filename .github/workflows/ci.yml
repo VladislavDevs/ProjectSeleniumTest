@@ -14,7 +14,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.12'
     - name: Start banking service
       run: |
         wget https://u.netology.ru/backend/uploads/lms/attachments/files/data/92738/dist.zip -O service.zip
