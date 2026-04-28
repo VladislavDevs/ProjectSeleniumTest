@@ -18,7 +18,7 @@ def driver():
     options.add_argument("--remote-debugging-port=9222")
 
     service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
+    driver = webdriver.Chrome(service=service, options=options)
     # Открываем сервис с параметрами, вызывающими дефект
     driver.get("http://localhost:8000/?balance=30000&reserved=20001")
     yield driver
