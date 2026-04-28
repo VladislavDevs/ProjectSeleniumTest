@@ -36,24 +36,20 @@ def test_commission_rounding_bug(driver):
     )
     card_input.send_keys("1234567812345678")
 
-    # Вводим сумму 110
     amount_input = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "input[placeholder*='1000']"))
     )
     amount_input.clear()
     amount_input.send_keys("110")
 
-    # Получаем текст комиссии (элемент с id="comission")
     commission_span = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "comission"))
     )
     commission = int(commission_span.text)
 
-    # Ожидаем 11, реально 10 → тест упадёт
     assert commission == 11, f"Комиссия должна быть 11, получено {commission}"
 
 def test_negative_amount_bug(driver):
-    # Перезагружаем страницу с нулевым доступным балансом
     driver.get("http://localhost:8000/?balance=1000&reserved=1000")
 
     rub_card = WebDriverWait(driver, 10).until(
@@ -72,8 +68,6 @@ def test_negative_amount_bug(driver):
     amount_input.clear()
     amount_input.send_keys("-500")
 
-    # Проверяем, что кнопка "Перевести" НЕ появляется
-    # Если появляется (баг) – тест упадёт
     with pytest.raises(Exception):
         WebDriverWait(driver, 3).until(
             EC.visibility_of_element_located((By.XPATH, "//button[text()='Перевести']"))
